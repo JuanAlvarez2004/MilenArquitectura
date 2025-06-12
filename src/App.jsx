@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { TextPlugin } from "gsap/TextPlugin"
 import { SplitText } from "gsap/SplitText"
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
+import { Draggable } from "gsap/Draggable"
 
 import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
@@ -12,7 +13,7 @@ import ProjectGrid from './components/ProjectGrid.jsx'
 import Starting from './components/Starting.jsx'
 
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin, SplitText, ScrollToPlugin)
+gsap.registerPlugin(ScrollTrigger, TextPlugin, SplitText, ScrollToPlugin, Draggable)
 
 const projectsObjs = [
   {
@@ -274,18 +275,22 @@ function App() {
 
     if (el) {
       gsap.from(el, {
-      duration: 1,
-      autoAlpha: 0
-    })
+        duration: 1,
+        autoAlpha: 0
+      })
+      Draggable.create(el, {
+        type: 'x',
+      })
     }
   }
+
+
   
   return (
     <>
       <Starting isComplete={startingComplete}/>
       <Header />
       <Hero />
-      {/* <Project /> */}
       <div id="projects" className="flex flex-col gap-4">
         {
           projectsObjs.length > 0 && 
