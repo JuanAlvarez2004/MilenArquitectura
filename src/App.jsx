@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect } from "react"
+import { useEffect, useState, useLayoutEffect, useRef } from "react"
 import gsap from "gsap"
     
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -8,16 +8,84 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 
 import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
-// import Project from './components/Project.jsx'
 import ProjectGrid from './components/ProjectGrid.jsx'
 import Starting from './components/Starting.jsx'
 
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin, SplitText, ScrollToPlugin)
 
+const projectsObjs = [
+  {
+    id: 1,
+    title: "Wave House",
+    description: "Una casa moderna que fluye con el paisaje natural, incorporando curvas suaves que imitan las ondas del océano. El diseño integra espacios interiores y exteriores de manera fluida.",
+    image: "https://arquine.com/wp-content/uploads/2014/03/Untitled-2.jpg",
+    location: "Malibu, California",
+    year: "2023",
+    icon: 'https://svgsilh.com/svg_v2/304326.svg'
+  },
+  {
+    id: 2,
+    title: "Wave House",
+    description: "Una casa moderna que fluye con el paisaje natural, incorporando curvas suaves que imitan las ondas del océano. El diseño integra espacios interiores y exteriores de manera fluida.",
+    image: "https://arquine.com/wp-content/uploads/2014/03/Untitled-2.jpg",
+    location: "Malibu, California",
+    year: "2023",
+    icon: 'https://svgsilh.com/svg_v2/304326.svg'
+  },
+  {
+    id: 3,
+    title: "Wave House",
+    description: "Una casa moderna que fluye con el paisaje natural, incorporando curvas suaves que imitan las ondas del océano. El diseño integra espacios interiores y exteriores de manera fluida.",
+    image: "https://arquine.com/wp-content/uploads/2014/03/Untitled-2.jpg",
+    location: "Malibu, California",
+    year: "2023",
+    icon: 'https://svgsilh.com/svg_v2/304326.svg'
+  },
+  {
+    id: 4,
+    title: "Wave House",
+    description: "Una casa moderna que fluye con el paisaje natural, incorporando curvas suaves que imitan las ondas del océano. El diseño integra espacios interiores y exteriores de manera fluida.",
+    image: "https://arquine.com/wp-content/uploads/2014/03/Untitled-2.jpg",
+    location: "Malibu, California",
+    year: "2023",
+    icon: 'https://svgsilh.com/svg_v2/304326.svg'
+  },
+  {
+    id: 5,
+    title: "Wave House",
+    description: "Una casa moderna que fluye con el paisaje natural, incorporando curvas suaves que imitan las ondas del océano. El diseño integra espacios interiores y exteriores de manera fluida.",
+    image: "https://arquine.com/wp-content/uploads/2014/03/Untitled-2.jpg",
+    location: "Malibu, California",
+    year: "2023",
+    icon: 'https://svgsilh.com/svg_v2/304326.svg'
+  },
+  {
+    id: 6,
+    title: "Wave House",
+    description: "Una casa moderna que fluye con el paisaje natural, incorporando curvas suaves que imitan las ondas del océano. El diseño integra espacios interiores y exteriores de manera fluida.",
+    image: "https://arquine.com/wp-content/uploads/2014/03/Untitled-2.jpg",
+    location: "Malibu, California",
+    year: "2023",
+    icon: 'https://svgsilh.com/svg_v2/304326.svg'
+  },
+  {
+    id: 7,
+    title: "Wave House",
+    description: "Una casa moderna que fluye con el paisaje natural, incorporando curvas suaves que imitan las ondas del océano. El diseño integra espacios interiores y exteriores de manera fluida.",
+    image: "https://arquine.com/wp-content/uploads/2014/03/Untitled-2.jpg",
+    location: "Malibu, California",
+    year: "2023",
+    icon: 'https://svgsilh.com/svg_v2/304326.svg'
+  },
+]
+
+
 function App() {
   const [startingComplete, setStartingComplete] = useState(false)
   const [isReady, setIsReady] = useState(false)
+  const [isOpen, setIsOpen] = useState(Array(projectsObjs.length).fill(false))
+  const projectRefs = useRef([])
   
   useLayoutEffect(() => {
     // Configuración inmediata
@@ -54,7 +122,10 @@ function App() {
     if (!isReady) return
     
     // Bloquear scroll
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = 'hidden'
+    document.body.style.paddingRight = `${scrollbarWidth}px`
+    document.body.style.backgroundColor = 'black'
     
     // Timeline maestro 
     const masterTL = gsap.timeline()
@@ -67,6 +138,8 @@ function App() {
         onComplete: () => {
           setStartingComplete(true)
           document.body.style.overflow = ''
+          document.body.style.paddingRight = ''
+          document.body.style.backgroundColor = ''
         }
       })
 
@@ -143,6 +216,7 @@ function App() {
           stagger: .1,
           autoAlpha: 0,
           filter: 'blur(10px)',
+          ease: 'power1.in'
       })
       .from(splitDescription.lines, {
           duration: 1,
@@ -150,50 +224,61 @@ function App() {
           stagger: .1,
           autoAlpha: 0,
           filter: 'blur(10px)',
+          ease: 'power1.in'
       }, '<')
       .from('#image-arqs', {
         autoAlpha: 0,
-        y: 30,
-        duration: 1
+        y: 40,
+        duration: 1,
+        ease: 'power1.in'
+      }, '<')
+      .from('#projects', {
+        autoAlpha: 0,
+        y: 40,
+        duration: 1,
+        ease: 'power1.in'
       }, '<')
 
       return tl
     }
 
-    // const animateProjects = () => {
-    //   const tl = gsap.timeline()
-      
-    //   // Animar entrada del título de proyectos
-    //   tl.from('.project-title', {
-    //     duration: 0.8,
-    //     y: 30,
-    //     autoAlpha: 0,
-    //     ease: "power2.out"
-    //   })
-    //   // Animar entrada de controles
-    //   .from('.project-controls', {
-    //     duration: 0.6,
-    //     y: 20,
-    //     autoAlpha: 0,
-    //     stagger: 0.1
-    //   }, '-=0.4')
-    //   // Animar entrada del primer slide
-    //   .from('.project-slide-0', {
-    //     duration: 1,
-    //     x: 100,
-    //     autoAlpha: 0,
-    //     ease: "power2.out"
-    //   }, '-=0.2')
-      
-    //   return tl
-    // }
+    const animateProjects = () => {
+      const projects = gsap.utils.toArray('.project')
+
+      // Anima la escala en función del scroll
+      projects.forEach((proj) => {
+        gsap.from(proj, {
+          scale: 0.8,
+          scrollTrigger: {
+            trigger: proj,
+            start: 'top 90%',
+            end: 'bottom 10%',
+            scrub: 0.5,
+          },
+        })
+      })
+    }
     
     masterTL
       .add(animateStarting())
       .add(animateHeader(), '-=0.7')
       .add(animateHero(), '<')
+      .add(animateProjects())
     
   }, [isReady])
+
+  const handleOpen = (idx) => {
+    setIsOpen(prev => prev.map((open, i) => i === idx ? !open : open))
+    
+    const el = projectRefs.current[idx]
+
+    if (el) {
+      gsap.from(el, {
+      duration: 1,
+      autoAlpha: 0
+    })
+    }
+  }
   
   return (
     <>
@@ -201,9 +286,21 @@ function App() {
       <Header />
       <Hero />
       {/* <Project /> */}
-      <ProjectGrid />
-      <ProjectGrid />
-      <ProjectGrid />
+      <div id="projects" className="flex flex-col gap-4">
+        {
+          projectsObjs.length > 0 && 
+            projectsObjs.map((p, idx) => (
+              <div 
+                ref={(el) => (projectRefs.current[idx] = el)} 
+                key={idx} 
+                onClick={() => handleOpen(idx)} 
+                className="project cursor-crosshair"
+              >
+                <ProjectGrid isOpen={isOpen[idx]} project={p} />
+              </div> 
+            ))
+        }
+      </div>
     </>
   )
 }

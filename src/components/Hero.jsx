@@ -2,7 +2,7 @@ import arqsImg from '../assets/images/arqs.webp'
 
 const Hero = () => {
   return (
-    <header className="my-15 p-20 text-gray-700 text-balance flex items-center justify-center flex-wrap gap-4">
+    <header className="mt-15 p-20 text-gray-700 text-balance flex items-center justify-center flex-wrap gap-4">
       <section className="w-2xl">
         <h1 id="title" className="font-serif text-5xl text-black font-bold py-3">MILÉN ARQUITECTURA</h1>
         <div id="description">

@@ -6,7 +6,7 @@ const Header = () => {
       </div>
       <ul className="flex gap-24 w-full p-2 justify-end-safe">
         <li className="hover:scale-110 transition"><a className="text-gray-700 text-xs tracking-widest" href="#">INICIO</a></li>
-        <li className="hover:scale-110 transition"><a className="text-gray-700 text-xs tracking-widest" href="#">PROYECTOS</a></li>
+        <li className="hover:scale-110 transition"><a className="text-gray-700 text-xs tracking-widest" href="#projects">PROYECTOS</a></li>
         <li className="hover:scale-110 transition"><a className="text-gray-700 text-xs tracking-widest" href="#">SERVICIOS</a></li>
         <li className="hover:scale-110 transition"><a className="text-gray-700 text-xs tracking-widest" href="#">NOSOTROS</a></li>
         <li className="hover:scale-110 transition"><a className="text-gray-700 text-xs tracking-widest" href="#">CONTACTO</a></li>
