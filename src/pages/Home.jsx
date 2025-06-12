@@ -1,5 +1,5 @@
 import { useEffect, useState, useLayoutEffect, useRef } from "react"
-
+import { useLocation } from 'react-router'
 import gsap from "gsap"
     
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -8,10 +8,9 @@ import { SplitText } from "gsap/SplitText"
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 import { Draggable } from "gsap/Draggable"
 
-import Header from './components/Header.jsx'
-import Hero from './components/Hero.jsx'
-import ProjectGrid from './components/ProjectGrid.jsx'
-import Starting from './components/Starting.jsx'
+import Hero from '../components/Hero.jsx'
+import ProjectGrid from '../components/ProjectGrid.jsx'
+import Starting from '../components/Starting.jsx'
 
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin, SplitText, ScrollToPlugin, Draggable)
@@ -83,7 +82,7 @@ const projectsObjs = [
 ]
 
 
-function App() {
+function Home() {
   const [startingComplete, setStartingComplete] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const [isOpen, setIsOpen] = useState(Array(projectsObjs.length).fill(false))
@@ -121,6 +120,17 @@ function App() {
     }
     
   }, [])
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === "#projects") {
+      const el = document.getElementById("projects");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
 
   useEffect(() => {
     if (!isReady) return
@@ -325,7 +335,6 @@ function App() {
   return (
     <>
       <Starting isComplete={startingComplete}/>
-      <Header />
       <Hero />
       <div id="projects" className="flex flex-col gap-4 overflow-x-hidden">
         {
@@ -346,4 +355,4 @@ function App() {
   )
 }
 
-export default App
+export default Home
