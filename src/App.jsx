@@ -1,4 +1,5 @@
 import { useEffect, useState, useLayoutEffect, useRef } from "react"
+
 import gsap from "gsap"
     
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -87,6 +88,8 @@ function App() {
   const [isReady, setIsReady] = useState(false)
   const [isOpen, setIsOpen] = useState(Array(projectsObjs.length).fill(false))
   const projectRefs = useRef([])
+  const draggableInstances = useRef([])
+  const scrollTriggerInstances = useRef([])
   
   useLayoutEffect(() => {
     // Configuración inmediata
@@ -247,8 +250,8 @@ function App() {
       const projects = gsap.utils.toArray('.project')
 
       // Anima la escala en función del scroll
-      projects.forEach((proj) => {
-        gsap.from(proj, {
+      projects.forEach((proj, index) => {
+        const tween = gsap.from(proj, {
           scale: 0.8,
           scrollTrigger: {
             trigger: proj,
@@ -257,6 +260,9 @@ function App() {
             scrub: 0.5,
           },
         })
+        
+        // Guardar referencia del ScrollTrigger
+        scrollTriggerInstances.current[index] = ScrollTrigger.getById(tween.scrollTrigger.id)
       })
     }
     
@@ -269,21 +275,51 @@ function App() {
   }, [isReady])
 
   const handleOpen = (idx) => {
-    setIsOpen(prev => prev.map((open, i) => i === idx ? !open : open))
+    const newIsOpen = isOpen.map((open, i) => i === idx ? !open : open)
+    setIsOpen(newIsOpen)
     
     const el = projectRefs.current[idx]
+    const scrollTrigger = scrollTriggerInstances.current[idx]
 
     if (el) {
-      gsap.from(el, {
-        duration: 1,
-        autoAlpha: 0
-      })
-      Draggable.create(el, {
-        type: 'x',
-      })
+      // Si se está abriendo el proyecto
+      if (!isOpen[idx] && newIsOpen[idx]) {
+        gsap.from(el, {
+          duration: 1,
+          autoAlpha: 0
+        })
+        
+        // Pausar ScrollTrigger y resetear escala
+        if (scrollTrigger) {
+          scrollTrigger.disable()
+        }
+        gsap.set(el, { scale: 1 })
+        
+        // Crear draggable con bounds limitados al viewport
+        draggableInstances.current[idx] = Draggable.create(el, {
+          type: 'x',
+          inertia: true
+        })[0]
+      } 
+      // Si se está cerrando el proyecto
+      else if (isOpen[idx] && !newIsOpen[idx]) {
+        // Destruir draggable si existe
+        if (draggableInstances.current[idx]) {
+          draggableInstances.current[idx].kill()
+          draggableInstances.current[idx] = null
+        }
+        
+        // Resetear posición
+        gsap.set(el, { x: 0 })
+        
+        // Reactivar ScrollTrigger
+        if (scrollTrigger) {
+          scrollTrigger.enable()
+          scrollTrigger.refresh()
+        }
+      }
     }
   }
-
 
   
   return (
@@ -291,7 +327,7 @@ function App() {
       <Starting isComplete={startingComplete}/>
       <Header />
       <Hero />
-      <div id="projects" className="flex flex-col gap-4">
+      <div id="projects" className="flex flex-col gap-4 overflow-x-hidden">
         {
           projectsObjs.length > 0 && 
             projectsObjs.map((p, idx) => (

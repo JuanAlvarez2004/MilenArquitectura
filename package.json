@@ -9,13 +9,13 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "build:styles": "npx @tailwindcss/cli -i ./src/input.css -o ./src/assets/output.css --watch"
-
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.8",
     "gsap": "^3.13.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-router": "^7.6.2",
     "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
