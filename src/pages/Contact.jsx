@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 
+import instagramIcon from '../assets/icons/instagram.webp'
+
 function Contact() {
   useEffect(() => {
     gsap.fromTo('#contact-title', { y: 15, autoAlpha: 0, filter: 'blur(10px)' }, {
@@ -12,9 +14,9 @@ function Contact() {
   }, [])
 
   return (
-    <div className="min-h-screen pt-24 p-20 text-gray-700">
+    <div className="min-h-screen pt-24 p-14 text-gray-700">
       <div className="max-w-4xl mx-auto">
-        <h1 id="contact-title" className="font-serif text-5xl text-black font-bold py-3 mb-8">
+        <h1 id="contact-title" className="font-serif text-4xl md:text-5xl text-black font-bold py-3 mb-8">
           CONTACTO
         </h1>
         
@@ -40,6 +42,12 @@ function Contact() {
               <div>
                 <h3 className="font-bold text-black">Dirección</h3>
                 <p>Ibagué, Tolima<br />Colombia</p>
+              </div>
+
+              <div className='h-7 w-7'>
+                <a href="https://www.instagram.com/milen.arquitectura/" target='_blank'>
+                  <img className='w-full object-cover hover:scale-110 transition-transform duration-75' src={instagramIcon} />
+                </a>
               </div>
             </div>
           </div>

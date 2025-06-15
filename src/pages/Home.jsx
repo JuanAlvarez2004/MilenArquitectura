@@ -136,10 +136,7 @@ function Home() {
     if (!isReady) return
     
     // Bloquear scroll
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = 'hidden'
-    document.body.style.paddingRight = `${scrollbarWidth}px`
-    document.body.style.backgroundColor = 'black'
+    document.documentElement.style.overflow = 'hidden'
     
     // Timeline maestro 
     const masterTL = gsap.timeline()
@@ -151,9 +148,7 @@ function Home() {
       const startingTL = gsap.timeline({
         onComplete: () => {
           setStartingComplete(true)
-          document.body.style.overflow = ''
-          document.body.style.paddingRight = ''
-          document.body.style.backgroundColor = ''
+          document.documentElement.style.overflow = ''
         }
       })
 
@@ -175,7 +170,7 @@ function Home() {
       })
       .to('#starting-sections', {
           duration: .5,
-          x: (window.innerWidth / 2) - 148,
+          x: (window.innerWidth / 2) - 110,
           y: (-window.innerHeight / 2) + 40,
           stagger: 0.05,
           ease: 'power1.in'
@@ -336,7 +331,7 @@ function Home() {
     <>
       <Starting isComplete={startingComplete}/>
       <Hero />
-      <div id="projects" className="flex flex-col gap-4 overflow-x-hidden">
+      <div id="projects" className="max-w-full flex flex-col gap-4 overflow-x-hidden">
         {
           projectsObjs.length > 0 && 
             projectsObjs.map((p, idx) => (
