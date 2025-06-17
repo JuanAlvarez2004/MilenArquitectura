@@ -1,9 +1,24 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import gsap from 'gsap'
-
+import emailjs from '@emailjs/browser'
 import instagramIcon from '../assets/icons/instagram.webp'
 
+const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+
+
 function Contact() {
+  const [user, setUser] = useState({
+    name: '',
+    message: '',
+    email: ''
+  })
+  
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const form = useRef()
+
   useEffect(() => {
     gsap.fromTo('#contact-title', { y: 15, autoAlpha: 0, filter: 'blur(10px)' }, {
       duration: .5,
@@ -13,12 +28,49 @@ function Contact() {
     })
   }, [])
 
+  const validateEmail = (email) => {
+    // Simple regex for email validation
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  const handleChange = ({ target }) => {
+    setUser(prev => ({
+      ...prev,
+      [target.name]: target.value
+    }))
+    setError('')
+    setSuccess('')
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!user.name || !user.email || !user.message) {
+      setError('Por favor completa todos los campos.');
+      return;
+    }
+    if (!validateEmail(user.email)) {
+      setError('Por favor ingresa un email válido.');
+      return;
+    }
+    emailjs.sendForm(serviceID, templateID, form.current, publicKey)
+      .then((result) => {
+        console.log(result)
+        setSuccess('¡Mensaje enviado correctamente!')
+        setUser({ name: '', message: '', email: '' })
+      }, (error) => {
+        console.log(error)
+        setError('Hubo un error al enviar el mensaje. Intenta de nuevo.')
+      })
+  }
+
   return (
     <div className="min-h-screen pt-24 p-14 text-gray-700">
       <div className="max-w-4xl mx-auto">
         <h1 id="contact-title" className="font-serif text-4xl md:text-5xl text-black font-bold py-3 mb-8">
           CONTACTO
         </h1>
+        {error && <div className="mb-4 text-red-600">{error}</div>}
+        {success && <div className="mb-4 text-green-600">{success}</div>}
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
           <div>
@@ -53,10 +105,13 @@ function Contact() {
           </div>
           
           <div>
-            <form className="space-y-6">
+            <form ref={form} onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-bold text-black mb-2">Nombre</label>
                 <input 
+                  name='name'
+                  onChange={handleChange}
+                  value={user.name}
                   type="text" 
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                 />
@@ -65,6 +120,9 @@ function Contact() {
               <div>
                 <label className="block text-sm font-bold text-black mb-2">Email</label>
                 <input 
+                  name='email'
+                  onChange={handleChange}
+                  value={user.email}
                   type="email" 
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                 />
@@ -73,6 +131,9 @@ function Contact() {
               <div>
                 <label className="block text-sm font-bold text-black mb-2">Mensaje</label>
                 <textarea 
+                  name='message'
+                  onChange={handleChange}
+                  value={user.message}
                   rows="5" 
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                 ></textarea>

@@ -14,23 +14,29 @@ const Header = () => {
 
   useEffect(() => {
     if (isOpen) {
-      setShowMenu(true); // Mostrar el menú antes de animar apertura
-      gsap.fromTo(
-        "#navBurger",
-        { y: -30, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.5, ease: "power1.inOut" }
-      );
+      setShowMenu(true); // Esto solo muestra el menú, NO animes aquí
     } else if (showMenu) {
       // Animar cierre y ocultar después
       gsap.to("#navBurger", {
         y: -30,
         autoAlpha: 0,
-        duration: 0.5,
+        duration: 0.1,
         ease: "power1.inOut",
-        onComplete: () => setShowMenu(false), // Ocultar después de animar
+        onComplete: () => setShowMenu(false),
       });
     }
   }, [isOpen, showMenu])
+
+  // Nuevo efecto: anima la entrada SOLO cuando showMenu cambia a true
+  useEffect(() => {
+    if (showMenu && isOpen) {
+      gsap.fromTo(
+        "#navBurger",
+        { y: -30, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.5, ease: "power1.inOut" }
+      );
+    }
+  }, [showMenu, isOpen])
 
   return (
     <nav id="nav" className="bg-white fixed top-0 left-0 right-0 z-10 ">

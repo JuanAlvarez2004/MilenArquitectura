@@ -11,6 +11,7 @@
     "build:styles": "npx @tailwindcss/cli -i ./src/input.css -o ./src/assets/output.css --watch"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@tailwindcss/cli": "^4.1.8",
     "gsap": "^3.13.0",
     "react": "^19.1.0",
